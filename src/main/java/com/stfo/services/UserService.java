@@ -96,4 +96,18 @@ public class UserService {
 		return user;	
 	}
 	
+	public UserModel removeBlockingAmount(Long userId, BigDecimal amount) {
+		UserModel user = null;
+		try {
+			HttpResponse<UserModel> userResponse = Unirest.put(Constants.API_URL + "/removeBlockedAmount/{userId}")
+					.routeParam("userId", userId.toString())
+					.queryString("amount", amount)
+					.asObject(UserModel.class);
+			user = userResponse.getBody();
+		} catch (UnirestException e) {
+			e.printStackTrace();
+		}
+		return user;	
+	}
+	
 }
