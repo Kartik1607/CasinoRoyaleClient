@@ -1,6 +1,7 @@
 package com.stfo.services;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 
 import org.springframework.stereotype.Service;
 
@@ -52,4 +53,47 @@ public class UserService {
 		}
 		return user;
 	}
+	
+	public UserModel blockAmount(Long userId, BigDecimal amount) {
+		UserModel user = null;
+		try {
+			HttpResponse<UserModel> userResponse = Unirest.put(Constants.API_URL + "/blockAmount/{userId}")
+					.routeParam("userId", userId.toString())
+					.queryString("amount", amount)
+					.asObject(UserModel.class);
+			user = userResponse.getBody();
+		} catch (UnirestException e) {
+			e.printStackTrace();
+		}
+		return user;	
+	}
+	
+	public UserModel addBalance(Long userId, BigDecimal amount) {
+		UserModel user = null;
+		try {
+			HttpResponse<UserModel> userResponse = Unirest.put(Constants.API_URL + "/recharge/{userId}")
+					.routeParam("userId", userId.toString())
+					.queryString("amount", amount)
+					.asObject(UserModel.class);
+			user = userResponse.getBody();
+		} catch (UnirestException e) {
+			e.printStackTrace();
+		}
+		return user;	
+	}
+	
+	public UserModel deductBalance(Long userId, BigDecimal amount) {
+		UserModel user = null;
+		try {
+			HttpResponse<UserModel> userResponse = Unirest.put(Constants.API_URL + "/deduct/{userId}")
+					.routeParam("userId", userId.toString())
+					.queryString("amount", amount)
+					.asObject(UserModel.class);
+			user = userResponse.getBody();
+		} catch (UnirestException e) {
+			e.printStackTrace();
+		}
+		return user;	
+	}
+	
 }
