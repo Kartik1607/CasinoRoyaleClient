@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.stfo.helper.Constants;
+import com.stfo.helper.ResponseModel;
 import com.stfo.models.CasinoTableModel;
 import com.stfo.models.UserModel;
 import com.stfo.models.requestModels.GameRequestModel;
@@ -17,14 +18,19 @@ public class GameService {
 	@Autowired
 	private UserService userService;
 
-	public GameResultResponseModel getResult(GameRequestModel model) {
+	public ResponseModel<GameResultResponseModel> getResult(GameRequestModel model) {
+		ResponseModel<GameResultResponseModel> response = new ResponseModel<>();
 		GameResultResponseModel result = new GameResultResponseModel();
 		Long userId = model.getUserId();
-		UserModel user = this.userService.getUser(userId);
-
+		ResponseModel<UserModel> userRequest = this.userService.getUser(userId);
+		if(! userRequest.isSuccess()) {
+			response.setSuccess(false);
+			response.setError(userRequest.getError());
+			return response;
+		}
 		CasinoTableModel table = model.getCasinoTable();
 		BigDecimal amountBetted = new BigDecimal(table.calculateBettingAmount());
-
+		UserModel user = userRequest.getData();
 		if (user.getBalanceAmount().compareTo(amountBetted) >= 0) {
 			this.userService.blockAmount(userId, amountBetted);
 			int randomNumber = Constants.getRandomNumber();
@@ -34,9 +40,13 @@ public class GameService {
 			result.setRandomNumber(randomNumber);
 			result.setAmountBetted(amountBetted);
 			result.setAmountWon(amountWon);
-			return result;
+			response.setSuccess(true);
+			response.setData(result);
+			return response;
 		} else {
-			return result;
+			response.setSuccess(false);
+			response.setError("Insufficient Balance");
+			return response;
 		}
 	}
 
