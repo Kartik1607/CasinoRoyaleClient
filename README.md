@@ -4,7 +4,7 @@ This is frontend client side tier of Casino Royale application.
 The application exposes REST API to do CRUD operations on a user, contains the game logic and serve a angular based web page made to client.
 This project was part of training at <a href='http://www.nagarro.com/en'>Nagarro</a>.
 
-<img src='https://imgur.com/8wuvuN0.gif'/>
+<img src='https://i.imgur.com/8wuvuN0.gif'/>
 
 | <img src='https://imgur.com/SzkmJlu.png'/> | <img src='https://imgur.com/jjcjgNn.png'/> |
 | --- | --- |
